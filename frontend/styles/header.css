@@ -1,0 +1,33 @@
+.notes__header {
+    display: flex;
+    width: 100%;
+    height: 50px;
+    padding: 0px 26px 0px 16px;
+    border-bottom: 2px solid #bbbbbb;
+    align-items: center;
+    border-radius: 0 0 8px 8px;
+}
+
+.notes__header-left-side {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.notes__header-placeholder {
+    flex-grow: 1;
+}
+
+.notes__header-right-side {
+    height:100%;
+    align-items: center;
+    display: flex;
+    gap: 15px;
+}
+
+.notes__header-right-side * {
+    border: none;
+    background: #FFFFFF;
+    cursor: pointer;
+}
