@@ -96,7 +96,13 @@
     border-radius: 25px;
 }
 
-.notes__preview-toolbar-content p, img {
+.notes__preview-toolbar-content p {
+    cursor: pointer;
+    margin-left: 4px;
+    margin-right: 4px;
+}
+
+.notes__preview-toolbar-content img {
     cursor: pointer;
     margin-left: 4px;
     margin-right: 4px;

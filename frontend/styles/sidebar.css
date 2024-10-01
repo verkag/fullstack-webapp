@@ -55,12 +55,15 @@
     border-radius: 7px;
     overflow: hidden;
     margin: 0.25em;
+    padding: 0;
 }
 .notes__list-item img {
     width: 100%;
     height: 100%;
     object-fit: fill;
     border-radius: 5px;
+    padding: 0;
+    margin: 0;
 }
 
 .notes__list-item--selected {
@@ -70,5 +73,6 @@
 
 .notes__list-item:hover {
     border: 2px dashed;
+    padding: 0;
 }
 
