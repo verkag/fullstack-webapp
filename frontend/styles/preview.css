@@ -81,7 +81,7 @@
 
 .notes__preview-toolbar {
     padding-top: 5px;
-    margin-bottom: 5px;
+    margin-bottom: 15px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -98,14 +98,15 @@
 
 .notes__preview-toolbar-content p {
     cursor: pointer;
-    margin-left: 4px;
-    margin-right: 4px;
+    margin-right: 6px;
 }
 
 .notes__preview-toolbar-content img {
+    width: 30px;
+    height: 20px;
     cursor: pointer;
-    margin-left: 4px;
-    margin-right: 4px;
+    margin-left: 6px;
+    object-fit: fill;
 }
 
 .notes__body {
