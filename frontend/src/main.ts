@@ -1,4 +1,4 @@
-import NotesAPI from "./NotesAPI.js";
+import NotesAPI from "./NotesAPI";
 
 console.log("program is started");
 

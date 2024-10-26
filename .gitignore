@@ -1,2 +1,4 @@
 todo.md
-js_public
+node_modules/
+public/dist/*
+
