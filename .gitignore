@@ -1,4 +1,4 @@
 todo.md
 node_modules/
-public/dist/*
-
+dist/
+build/
