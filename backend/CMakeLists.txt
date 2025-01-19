@@ -2,42 +2,30 @@ cmake_minimum_required(VERSION 3.20)
 
 project(FULLSTACK VERSION 1.0.0 LANGUAGES CXX)
 
-# include(cmake/StandardSettings.cmake)
-# message(${PROJECT_ENABLE_CLANG_TIDY})
-# message(${PROJECT_ENABLE_UNIT_TESTING})
-# message(${PROJECT_ENABLE_ASAN})
-# include(cmake/StaticAnalyzer.cmake)
-# include(cmake/Utils.cmake)
+set(CMAKE_BUILD_TYPE DEBUG)
 
-# if (NOT CMAKE_BUILD_TYPE)
-#     set(CMAKE_BUILD_TYPE "Debug")
-# endif()
-
-message(STATUS "Started CMake for ${PROJECT_NAME} v${PROJECT_VERSION}...\n")
-
-if(PROJECT_SOURCE_DIR STREQUAL PROJECT_BINARY_DIR)
-  message(FATAL_ERROR "In-source builds not allowed. Please make a new directory (called a build directory) and run CMake from there.\n")
-endif()
-
-# Create library, setup header and source file
 include(cmake/SourcesAndHeaders.cmake)
-
-# if(PROJECT_ENABLE_UNIT_TESTING)
-#    enable_testing()
-#    add_subdirectory(test)
-# endif()
-# add_subdirectory(src)
-
-# Set the project standard and warnings
 include(cmake/CompilerWarnings.cmake)
 add_compile_options(${PROJECT_WARNINGS})
 add_compile_options(-std=c++20)
 
-set(CMAKE_CXX_STANDARD 20)         # Set to C++20
-set(CMAKE_CXX_STANDARD_REQUIRED ON) # Enforce it
-set(CMAKE_CXX_EXTENSIONS OFF)      # Disable compiler extensions (optional)
+find_package(Boost REQUIRED COMPONENTS system)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${PROJECT_WARNINGS}")
-add_subdirectory(src)
-# Format the project using the `clang-format` target (i.e: cmake --build build --target clang-format)
-# add_clang_format_target()
+if (Boost_FOUND)
+    if(${PROJECT_NAME}_VERBOSE_OUTPUT)
+        verbose_message("Found the following sources:")
+        foreach(source IN LISTS sources)
+            verbose_message("* ${source}")
+        endforeach()
+    endif()
+
+    add_library(PROJECT_lib SHARED ${sources})    
+
+    target_include_directories(PROJECT_lib PRIVATE ${Boost_INCLUDE_DIRS}) 
+    target_link_libraries(PROJECT_lib PRIVATE ${Boost_LIBRARIES})
+
+    target_include_directories(PROJECT_lib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+
+    add_executable(PROJECT_bin ${exe_sources}) 
+    target_link_libraries(PROJECT_bin PROJECT_lib)
+endif()    
