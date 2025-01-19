@@ -15,6 +15,6 @@ if (Boost_FOUND)
 
     target_include_directories(PROJECT_lib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
-    add_executable(PROJECT_bin main.cpp) 
+    add_executable(PROJECT_bin ${exe_sources}) 
     target_link_libraries(PROJECT_bin PROJECT_lib)
 endif()    

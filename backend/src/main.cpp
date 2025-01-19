@@ -1,9 +1,8 @@
-#include "test.hpp"
 #include <boost/asio.hpp>
+#include <iostream>
 
 int main()
 {
-    boost::asio::io_context ioc{1};
-    foo();
+    std::cout << __cplusplus << std::endl;
 }
 

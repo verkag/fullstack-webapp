@@ -1,12 +1,15 @@
-set(sources
-    test.cpp
+file(GLOB sources
+    src/*.cpp
 )
 
-# set(exe_sources
-#     main.cpp
-# )
+list(REMOVE_ITEM sources src/main.cpp)
 
-set(headers
+file(GLOB exe_sources
+    src/main.cpp
+)
+
+file(GLOB headers
+    src/*.hpp
 )
 
 # set(test_sources
