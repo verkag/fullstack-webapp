@@ -1,21 +1,16 @@
 #include <boost/asio.hpp>
-#include "config.hpp"
-#include "connection.hpp"
+#include <boost/beast.hpp>
+
+namespace asio = boost::asio;
+namespace beast = boost::beast;
 
 class Server {
 public: 
-    Server(const Server&) = delete;
-    Server& operator=(const Server&) = delete;
-    explicit Server(const unsigned short port = 80);
-
     void run();
-    Config cfg;    
+    // add logger logic here
 private:
-    void accept(); 
-    void read(Connection c); 
-    void find_resource(Connection c);
-    void write(Connection c);
-
-    boost::asio::io_context ioc_;
-    boost::asio::ip::tcp::acceptor acceptor_;
+    asio::awaitable<void> accept(); 
+    asio::awaitable<void> process_session(beast::tcp_stream stream); 
+    beast::http::message_generator handle_request(beast::http::request<beast::http::string_body>&& req);
+    void find_resource();
 };

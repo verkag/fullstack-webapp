@@ -21,7 +21,7 @@ public:
     std::size_t max_request_streambuf_size = (std::numeric_limits<std::size_t>::max)();
     /// IPv4 address in dotted decimal form or IPv6 address in hexadecimal notation.
     /// If empty, the address will be any address.
-    std::string address;
+    std::string address = "localhost";
     /// Set to false to avoid binding the socket to an address that is already in use. Defaults to true.
     bool reuse_address = true;
     /// Make use of RFC 7413 or TCP Fast Open (TFO)

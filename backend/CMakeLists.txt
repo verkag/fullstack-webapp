@@ -12,20 +12,15 @@ add_compile_options(-std=c++20)
 find_package(Boost REQUIRED COMPONENTS system)
 
 if (Boost_FOUND)
-    if(${PROJECT_NAME}_VERBOSE_OUTPUT)
-        verbose_message("Found the following sources:")
-        foreach(source IN LISTS sources)
-            verbose_message("* ${source}")
-        endforeach()
-    endif()
+    message("Found the following sources:")
+    foreach(source IN LISTS sources)
+        message("* ${source}")
+    endforeach()
 
-    add_library(PROJECT_lib SHARED ${sources})    
+    add_executable(back src/server.cpp src/main.cpp)    
 
-    target_include_directories(PROJECT_lib PRIVATE ${Boost_INCLUDE_DIRS}) 
-    target_link_libraries(PROJECT_lib PRIVATE ${Boost_LIBRARIES})
+    target_include_directories(back PRIVATE ${Boost_INCLUDE_DIRS}) 
+    target_link_libraries(back PRIVATE ${Boost_LIBRARIES})
 
-    target_include_directories(PROJECT_lib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
-
-    add_executable(PROJECT_bin ${exe_sources}) 
-    target_link_libraries(PROJECT_bin PROJECT_lib)
+    target_include_directories(back PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 endif()    

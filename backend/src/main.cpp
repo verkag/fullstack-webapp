@@ -1,8 +1,8 @@
-#include <boost/asio.hpp>
-#include <iostream>
+#include "server.hpp"
 
 int main()
 {
-    std::cout << __cplusplus << std::endl;
+    Server s;
+    s.run();
 }
 
