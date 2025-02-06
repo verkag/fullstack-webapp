@@ -17,7 +17,7 @@ if (Boost_FOUND)
         message("* ${source}")
     endforeach()
 
-    add_executable(back src/server.cpp src/main.cpp)    
+    add_executable(back src/server.cpp src/main.cpp src/util.cpp)    
 
     target_include_directories(back PRIVATE ${Boost_INCLUDE_DIRS}) 
     target_link_libraries(back PRIVATE ${Boost_LIBRARIES})

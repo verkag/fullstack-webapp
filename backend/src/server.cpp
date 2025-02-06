@@ -1,4 +1,5 @@
 #include "server.hpp"
+#include <iostream>
 
 void Server::run() {
     asio::io_context ioc;
@@ -24,7 +25,7 @@ asio::awaitable<void> Server::process_session(beast::tcp_stream stream) {
     beast::flat_buffer buffer; 
 
     for(;;) {
-        stream.expires_after(std::chrono::seconds(5));
+        stream.expires_after(std::chrono::seconds(30));
         beast::http::request<beast::http::string_body> req;
 
         co_await beast::http::async_read(stream, buffer, req, asio::use_awaitable);
@@ -40,11 +41,22 @@ asio::awaitable<void> Server::process_session(beast::tcp_stream stream) {
 }
 
 beast::http::message_generator Server::handle_request(beast::http::request<beast::http::string_body>&& req) {
-    beast::http::response<beast::http::string_body> res{beast::http::status::ok, req.version()};
-    res.body() = "123";
-    res.content_length(3);
-    res.keep_alive(req.keep_alive());
-    return res;
+//   beast::http::response<beast::http::string_body> res{beast::http::status::ok, req.version()};
+//   res.body() = "123";
+//   res.content_length(3);
+//   res.keep_alive(req.keep_alive());
+//   return res;
+    beast::http::response<beast::http::string_body> returned_res;
+    for (auto& [k,v] : resources) {
+        std::cout << req.target() << std::endl;
+
+        if (std::regex_search(static_cast<std::string>(req.target()), k)) {
+            v[req.method_string()](std::move(req), returned_res);
+            std::cout << "handler has been found" << std::endl;
+        }
+    }
+
+    return returned_res;
 }
 
 
