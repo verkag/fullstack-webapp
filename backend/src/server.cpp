@@ -1,5 +1,12 @@
 #include "server.hpp"
 #include <iostream>
+#include "spdlog/async.h"
+#include "spdlog/sinks/basic_file_sink.h"
+
+
+Server::Server() {
+    logger_ = spdlog::basic_logger_st<spdlog::async_factory>("async_logger", "logs/async_log.txt");
+}
 
 void Server::run() {
     asio::io_context ioc;
