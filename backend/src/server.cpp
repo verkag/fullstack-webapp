@@ -6,6 +6,8 @@
 #include "spdlog/sinks/stdout_color_sinks.h"
 #include "spdlog/sinks/stdout_sinks.h"
 
+#include <pqxx/pqxx>
+
 Server::~Server() {
     logger_->info("server is shutting down..");
 }
@@ -18,15 +20,15 @@ Server::Server() : ioc_(), acceptor_(ioc_, {asio::ip::tcp::v4(), 5555}), signals
     console_sink->set_pattern("[%^%l%$] %v");
     console_sink->set_level(spdlog::level::info);
 
-    auto console_err_sink = std::make_shared<spdlog::sinks::stderr_color_sink_st>();
-    console_err_sink->set_pattern("[%^%l%$] %v");
-    console_err_sink->set_level(spdlog::level::err);
+   // auto console_err_sink = std::make_shared<spdlog::sinks::stderr_color_sink_st>();
+   // console_err_sink->set_pattern("[%^%l%$] %v");
+   // console_err_sink->set_level(spdlog::level::err);
 
     auto file_sink = std::make_shared<spdlog::sinks::basic_file_sink_st>("logs/async_logs.txt", true);
     file_sink->set_pattern("[%Y-%m-%d %H:%M:%S] [%l] %v");
     file_sink->set_level(spdlog::level::debug);
 
-    spdlog::sinks_init_list sil = { console_sink, console_err_sink, file_sink };
+    spdlog::sinks_init_list sil = { console_sink, file_sink };
     logger_ = std::make_shared<spdlog::async_logger>("async_multisink_logger", sil.begin(), sil.end(), ltp_);
     logger_->set_level(spdlog::level::debug);
 
@@ -82,15 +84,22 @@ asio::awaitable<void> Server::process_session(beast::tcp_stream stream) {
 }
 
 beast::http::message_generator Server::handle_request(beast::http::request<beast::http::string_body>&& req) {
+    const std::string method = req.method_string();
+    const std::string target = req.target();
+    logger_->debug("inside handle_connection funciton, searching for {} {}", target, method);
     beast::http::response<beast::http::string_body> returned_res;
     for (auto& [k,v] : resources) {
-        if (std::regex_search(static_cast<std::string>(req.target()), k)) {
-            const std::string method = req.method_string();
-            const std::string target = req.target();
-            v[method](std::move(req), returned_res);
+        if (std::regex_search(target, k)) {
+            logger_->debug("match found");
+            try {
+                v[method](std::move(req), returned_res);
+            } catch (const std::exception& e) {
+                logger_->error("{}", e.what());
+            }
             logger_->debug("handler {} {} has been called", target, method); 
-        }
+        }     
     }
+
     
     return returned_res;
 }

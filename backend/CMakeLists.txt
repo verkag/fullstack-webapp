@@ -22,6 +22,12 @@ if (Boost_FOUND)
         GIT_TAG v1.15.1
     )
     FetchContent_MakeAvailable(spdlog)
+
+    FetchContent_Declare(pqxx 
+        GIT_REPOSITORY https://github.com/jtv/libpqxx.git
+        GIT_TAG 7.10.0
+    )
+    FetchContent_MakeAvailable(pqxx)
     
 
     message("Found the following sources:")
@@ -36,5 +42,6 @@ if (Boost_FOUND)
 
     target_link_libraries(back PRIVATE ${Boost_LIBRARIES})
     target_link_libraries(back PRIVATE spdlog::spdlog)
+    target_link_libraries(back PRIVATE pqxx)
 
 endif()    
