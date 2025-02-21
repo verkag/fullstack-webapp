@@ -9,7 +9,7 @@ include(cmake/CompilerWarnings.cmake)
 
 include(FetchContent)
 
-add_compile_options(${PROJECT_WARNINGS})
+add_compile_options(${PROJECT_WARNINGS} -Wno-attributes)
 add_compile_options(-std=c++20)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON) # optional, for clangdb
@@ -29,6 +29,8 @@ if (Boost_FOUND)
     )
     FetchContent_MakeAvailable(pqxx)
     
+    find_package(OpenSSL REQUIRED) 
+
 
     message("Found the following sources:")
     foreach(source IN LISTS sources)
@@ -41,7 +43,13 @@ if (Boost_FOUND)
     target_include_directories(back PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
     target_link_libraries(back PRIVATE ${Boost_LIBRARIES})
+
+    target_compile_options(spdlog PRIVATE "-w")
     target_link_libraries(back PRIVATE spdlog::spdlog)
+    target_compile_options(pqxx PRIVATE "-w")
     target_link_libraries(back PRIVATE pqxx)
+
+    target_link_libraries(back PRIVATE OpenSSL::SSL OpenSSL::Crypto)
+
 
 endif()    
